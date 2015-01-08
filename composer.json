@@ -1,0 +1,16 @@
+{
+    "name": "ryanhs/genetic-algorithm-toolkit",
+    "description": "Genetic Algorithm Toolkit in PHP",
+    "require-dev": {
+        "phpunit/phpunit": "~4.4"
+    },
+    "license": "MIT License",
+    "authors": [
+        {
+            "name": "ryan hs",
+            "email": "mr.ryansilalahi@gmail.com"
+        }
+    ],
+    "minimum-stability": "RC",
+    "require": {}
+}
