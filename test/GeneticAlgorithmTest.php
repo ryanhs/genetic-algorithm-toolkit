@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-class GeneticAlgoritmTest extends PHPUnit_Framework_TestCase{	
+class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{	
 	
 	public function testInit(){
 		$d = new \Ryanhs\GAToolkit\Dependency();
@@ -33,5 +33,24 @@ class GeneticAlgoritmTest extends PHPUnit_Framework_TestCase{
 		
 		$this->assertEquals('1', $ga->get_option('a'));
 		$this->assertEquals('2', $ga->get_option('b'));
+	}
+	
+	public function testRun1(){
+		$d = new \Ryanhs\GAToolkit\Dependency();
+		$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
+		
+		$ga = new \Ryanhs\GAToolkit\GeneticAlgorithm($d);
+		
+		$ga->set_option(array(
+			'goal' => 'test',
+			'chromosome_length' => 4,
+			
+			'max_generation' => 5,
+			'max_population' => 20,
+			'selection' => 90, // percent
+			'mutation' => 1, // percent
+		));
+		
+		$ga->run();
 	}
 }
