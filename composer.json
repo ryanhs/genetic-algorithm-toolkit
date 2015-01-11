@@ -12,5 +12,12 @@
         }
     ],
     "minimum-stability": "RC",
-    "require": {}
+    "require": {
+    	"ryanhs/hook" : "~1.0"
+    },
+    "autoload": {
+		"psr-4": {
+			"Ryanhs\\GAToolkit\\": "src/"
+		}
+	}	
 }
