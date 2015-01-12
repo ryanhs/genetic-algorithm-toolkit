@@ -11,7 +11,7 @@ abstract class AbstractChromosome{
 	protected $data;
 	
 	// array of tmp, may usefull for algorithm to attach some information about this chromosome
-	protected $tmp = array();
+	public $tmp = array();
 	
 	// generate new random chromosome (usefull for init population)
 	// MUST INHERITE THIS METHOD!

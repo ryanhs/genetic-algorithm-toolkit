@@ -35,6 +35,33 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 		$this->assertEquals('2', $ga->get_option('b'));
 	}
 	
+	public function testFitness(){
+		$d = new \Ryanhs\GAToolkit\Dependency();
+		$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
+		
+		$ga = new \Ryanhs\GAToolkit\GeneticAlgorithm($d);
+		$ga->set_option(array(
+			'goal' => 'test',
+			
+			'max_generation' => 5,
+			'max_population' => 20,
+			'selection' => 90, // percent
+			'mutation' => 1, // percent
+		));
+		
+		$chromosome_options = array(
+			'length' => 4
+		);
+		
+		$population = $ga->init_population($chromosome_options)->get_population();
+		$fitness_function = $ga->fitness_function()->get_population_fitness();
+		
+		foreach($population as $key => $chromosome){
+			$this->assertArrayHasKey($key, $fitness_function);
+			$this->assertEquals($chromosome->tmp['fitness'], $fitness_function[$key]);
+		}
+	}
+	
 	public function testRun1(){
 		$d = new \Ryanhs\GAToolkit\Dependency();
 		$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
@@ -43,7 +70,6 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 		
 		$ga->set_option(array(
 			'goal' => 'test',
-			'chromosome_length' => 4,
 			
 			'max_generation' => 5,
 			'max_population' => 20,
