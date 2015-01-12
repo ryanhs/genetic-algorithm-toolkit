@@ -51,6 +51,10 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 			'mutation' => 1, // percent
 		));
 		
-		$ga->run();
+		$ga->run(array(
+			'length' => 4
+		));
+		
+		//var_dump($ga->get_population());
 	}
 }

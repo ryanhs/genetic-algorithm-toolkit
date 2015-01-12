@@ -29,14 +29,14 @@ class GeneticAlgorithm{
 		'mutation' => 1, // percent
 	);
 	
-	protected $historic;
 	protected $population;
+	protected $population_historic;
 	
 	public function __construct(Dependency $dependency){
 		$this->dependency = $dependency;
 		
-		$this->historic = array();
 		$this->population = array();
+		$this->population_historic = array();
 		
 		Hook::call(self::HOOK_INIT);
 	}
@@ -55,8 +55,13 @@ class GeneticAlgorithm{
 		return isset($this->options[$key]) ? $this->options[$key] : null;
 	}
 	
-	public function init_population(){
+	public function init_population($options = array()){
+		$this->population = array();
+		$this->population_historic = array();
 		
+		for($i = 0; $i < $this->options['max_population']; $i++){
+			$this->population[] = call_user_func($this->dependency->chromosome . '::generate', $options);
+		}
 		Hook::call(self::HOOK_INIT_POPULATION);
 	}
 	
@@ -79,9 +84,13 @@ class GeneticAlgorithm{
 		return new $this->dependency();
 	}
 	
+	public function get_population(){
+		return $this->population;
+	}
 	
-	public function run(){
-		$this->init_population();
+	
+	public function run($chromosome_options){
+		$this->init_population($chromosome_options);
 		
 		$match_goal = false;
 		$i = 0;
