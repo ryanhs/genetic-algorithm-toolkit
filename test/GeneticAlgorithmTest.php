@@ -62,12 +62,11 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 		}
 	}
 	
-	public function testRun1(){
+	public function testSelection(){
 		$d = new \Ryanhs\GAToolkit\Dependency();
 		$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
 		
 		$ga = new \Ryanhs\GAToolkit\GeneticAlgorithm($d);
-		
 		$ga->set_option(array(
 			'goal' => 'test',
 			
@@ -77,10 +76,41 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 			'mutation' => 1, // percent
 		));
 		
-		$ga->run(array(
+		$chromosome_options = array(
 			'length' => 4
+		);
+		
+		$before = $ga->init_population($chromosome_options)->get_population();
+		$ga->fitness_function();
+		$after = $ga->selection()->get_population();
+		
+		$this->assertGreaterThan(count($after), count($before));
+		$this->assertArraySubset($after, $before);
+	}
+	
+	
+	public function testCrossover(){
+		$d = new \Ryanhs\GAToolkit\Dependency();
+		$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
+		
+		$ga = new \Ryanhs\GAToolkit\GeneticAlgorithm($d);
+		$ga->set_option(array(
+			'goal' => 'test',
+			
+			'max_generation' => 5,
+			'max_population' => 20,
+			'selection' => 90, // percent
+			'mutation' => 1, // percent
 		));
 		
-		//var_dump($ga->get_population());
+		$chromosome_options = array(
+			'length' => 4
+		);
+		
+		$before = $ga->init_population($chromosome_options)->get_population();
+		$after = $ga->crossover()->get_population();
+		
+		$this->assertCount(20, $after);
+		$this->assertNotEquals($after, $before);
 	}
 }

@@ -84,13 +84,54 @@ class GeneticAlgorithm{
 	}
 	
 	public function selection(){
+		$pc = count($this->population);
+		$pc_to = floor($this->options['selection'] / 100 * $pc);
+		
+		// get slice based on fitness_function
+		$this->population_fitness = array_slice($this->population_fitness, 0, $pc_to - 1);
+		$new_population = array();
+		foreach($this->population_fitness as $i => $fitness){
+			$new_population[] = $this->population[$i];
+		}
+		
+		$this->population = $new_population;
 		
 		Hook::call(self::HOOK_SELECTION);
+		
+		return $this;
+	}
+	
+	public function crossover(){
+		$this->population_historic[] = array(
+			'population' => $this->population,
+			'population_fitness' => $this->population_fitness,
+		);
+		
+		$new_population = array();
+		
+		for($i = 0; $i < $this->options['max_population']; $i++){
+			$a = array_rand($this->population);
+			$b = array_rand($this->population);
+			
+			$a = $this->population[$a];
+			$b = $this->population[$b];
+			
+			$new_population[] = $a->crossover($b);
+		}
+		
+		$this->population = $new_population;
+		$this->population_fitness = array();
+		
+		Hook::call(self::HOOK_CROSSOVER);
+		
+		return $this;
 	}
 	
 	public function mutation(){
 		
 		Hook::call(self::HOOK_MUTATION);
+		
+		return $this;
 	}
 	
 	public function get_best(){
@@ -116,6 +157,7 @@ class GeneticAlgorithm{
 			
 			$this->fitness_function();
 			$this->selection();
+			$this->crossover();
 			$this->mutation();
 			
 			// compare the best chromosome to goal
