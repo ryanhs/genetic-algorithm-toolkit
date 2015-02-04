@@ -2,13 +2,13 @@
 
 require 'vendor/autoload.php';
 
-class SimpleString2Test extends PHPUnit_Framework_TestCase{	
+class SimpleStringOptimizedTest extends PHPUnit_Framework_TestCase{	
 	
 	public function testInit(){
 		$options = array(
 			'length' => 4,
 		);
-		$c = \Ryanhs\GAToolkit\Chromosome\SimpleString2::generate($options);
+		$c = \Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized::generate($options);
 		
 		$this->assertInstanceOf('\Ryanhs\GAToolkit\Chromosome\AbstractChromosome', $c);
 	}
@@ -19,22 +19,23 @@ class SimpleString2Test extends PHPUnit_Framework_TestCase{
 		$options = array(
 			'length' => strlen($goal),
 		);
-		$c = \Ryanhs\GAToolkit\Chromosome\SimpleString2::generate($options);
+		$c = \Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized::generate($options);
 		
 		$this->assertGreaterThanOrEqual(0, $c->fitness_function($goal));
 	}
 	
-	public function testBreeding(){
+	public function testCrossover(){
 		$goal = 'test';
 		
 		$options = array(
+			'goal' => $goal,
 			'length' => strlen($goal),
 		);
 		
-		$a = \Ryanhs\GAToolkit\Chromosome\SimpleString2::generate($options);
-		$b = \Ryanhs\GAToolkit\Chromosome\SimpleString2::generate($options);
+		$a = \Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized::generate($options);
+		$b = \Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized::generate($options);
 		
-		$c = $a->breeding($b);
+		$c = $a->crossover($b, $options);
 		
 		$this->assertInstanceOf('\Ryanhs\GAToolkit\Chromosome\AbstractChromosome', $c);
 		$this->assertGreaterThanOrEqual(0, $c->fitness_function($goal));
@@ -47,11 +48,11 @@ class SimpleString2Test extends PHPUnit_Framework_TestCase{
 			'length' => strlen($goal),
 		);
 		
-		$a = \Ryanhs\GAToolkit\Chromosome\SimpleString2::generate($options);
+		$a = \Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized::generate($options);
 		
 		$a->mutation($goal);
 		
-		$this->assertGreaterThanOrEqual(0, $a->fitness_function($goal));
+		$this->assertGreaterThanOrEqual(1, $a->fitness_function($goal));
 	}
 	
 }

@@ -25,7 +25,7 @@ class SimpleString extends AbstractChromosome{
 		}
 		
 		for($i = 0; $i < intval($tmp_options['length']); $i++){
-			$c = $tmp_options['seed'][rand(0, strlen($tmp_options['seed']) - 1)];
+			$c = $tmp_options['seed'][mt_rand(0, strlen($tmp_options['seed']) - 1)];
 			$data .= $c;
 		}
 		return new SimpleString($data);
@@ -59,7 +59,7 @@ class SimpleString extends AbstractChromosome{
 		foreach($goal as $i => $chr){
 			
 			if(isset($a[$i]) && isset($b[$i])){
-				$c_data .= rand(0, 1) == 1 ? $a[$i] : $b[$i];
+				$c_data .= mt_rand(0, 1) == 1 ? $a[$i] : $b[$i];
 			}
 			else if(isset($a[$i])){
 				$c_data .= $a[$i];
@@ -68,7 +68,7 @@ class SimpleString extends AbstractChromosome{
 				$c_data .= $b[$i];
 			}
 			else{
-				$c_data .= rand(0, strlen($tmp_options['seed']) - 1);
+				$c_data .= mt_rand(0, strlen($tmp_options['seed']) - 1);
 			}
 		}
 		$class_name = get_called_class();
@@ -82,14 +82,12 @@ class SimpleString extends AbstractChromosome{
 		$new_data = str_split($this->data);
 		$goal = str_split(strval($goal));
 		
-		$chromosome_i = rand(0, count($goal) - 1);
+		$chromosome_i = mt_rand(0, count($goal) - 1);
 		if(isset($new_data[$chromosome_i])){
 			$new_data[$chromosome_i] = $goal[$chromosome_i];
 		}
 		
 		$this->data = implode($new_data);
-		
-		return $this;
 	}
 	
 }

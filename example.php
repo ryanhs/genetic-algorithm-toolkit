@@ -9,7 +9,7 @@ $ga = new Toolkit();
 
 
 $ga->goal = 'hello world';
-$ga->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
+$ga->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized';
 
 $ga->selection = 0.9;
 $ga->mutation = 0.1;

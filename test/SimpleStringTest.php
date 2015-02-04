@@ -24,17 +24,18 @@ class SimpleStringTest extends PHPUnit_Framework_TestCase{
 		$this->assertGreaterThanOrEqual(0, $c->fitness_function($goal));
 	}
 	
-	public function testBreeding(){
+	public function testCrossover(){
 		$goal = 'test';
 		
 		$options = array(
+			'goal' => $goal,
 			'length' => strlen($goal),
 		);
 		
 		$a = \Ryanhs\GAToolkit\Chromosome\SimpleString::generate($options);
 		$b = \Ryanhs\GAToolkit\Chromosome\SimpleString::generate($options);
 		
-		$c = $a->breeding($b);
+		$c = $a->crossover($b, $options);
 		
 		$this->assertInstanceOf('\Ryanhs\GAToolkit\Chromosome\AbstractChromosome', $c);
 		$this->assertGreaterThanOrEqual(0, $c->fitness_function($goal));
