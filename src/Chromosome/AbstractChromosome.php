@@ -29,11 +29,11 @@ abstract class AbstractChromosome{
 	public abstract function fitness_function();
 	
 	// crossover? mating? yeah be a parent
-	public abstract function breeding($partner);
+	public abstract function breeding($partner, $options = array());
 	
 	// alias of breeding
-	public function crossover($partner){
-		return $this->breeding($partner);
+	public function crossover($partner, $options = array()){
+		return $this->breeding($partner, $options);
 	}
 	
 	// become a wolverine, yeah!!

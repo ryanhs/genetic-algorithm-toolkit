@@ -88,7 +88,7 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 		$this->assertArraySubset($after, $before);
 	}
 	
-	
+	// because crossover generate new generation we check new generation too
 	public function testCrossover(){
 		$d = new \Ryanhs\GAToolkit\Dependency();
 		$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
@@ -108,9 +108,19 @@ class GeneticAlgorithmTest extends PHPUnit_Framework_TestCase{
 		);
 		
 		$before = $ga->init_population($chromosome_options)->get_population();
+		$before_historic = $ga->get_population_historic();
+		
 		$after = $ga->crossover()->get_population();
+		$after_historic = $ga->get_population_historic();
 		
 		$this->assertCount(20, $after);
+		
+		// this check is depends on what chromosome is used
 		$this->assertNotEquals($after, $before);
+		
+		// check if historic add one after crossover
+		$this->assertEquals(count($before_historic) + 1, count($after_historic));
 	}
+	
+	
 }

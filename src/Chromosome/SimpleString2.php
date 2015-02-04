@@ -24,7 +24,7 @@ class SimpleString2 extends SimpleString{
 		return new SimpleString($data, $options);
 	}
 	
-	public function breeding($partner){
+	public function breeding($partner, $options = array()){
 		$class_name = get_called_class();
 		
 		$tmp_a = str_split($partner->get_data());
