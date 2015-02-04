@@ -7,19 +7,23 @@ require 'vendor/autoload.php';
 class SimpleString extends AbstractChromosome{
 	
 	protected static $options_default = array(
-		'length' => 0,
-		//'seed' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 !@#$%^&*()_+'
-		'seed' => 'abcdefghijklmnopqrstuvwxyz'
+		'seed' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 !@#$%^&*()_+'
+		//'seed' => 'abcdefghijklmnopqrstuvwxyz '
 	);
 	
 	public function __construct($data){
 		$this->data = $data;
 	}
 	
-	public static function generate($options){
+	public static function generate($options = array()){
 		$data = '';
 		
 		$tmp_options = array_merge(self::$options_default, $options);
+		
+		if(!isset($tmp_options['length'])){
+			$tmp_options['length'] = strlen($options['goal']);
+		}
+		
 		for($i = 0; $i < intval($tmp_options['length']); $i++){
 			$c = $tmp_options['seed'][rand(0, strlen($tmp_options['seed']) - 1)];
 			$data .= $c;
@@ -27,7 +31,7 @@ class SimpleString extends AbstractChromosome{
 		return new SimpleString($data);
 	}
 	
-	public function fitness_function($goal = false){
+	public function fitness_function($goal = null){
 		$goal = str_split(strval($goal));
 		$data = str_split($this->data);
 		
@@ -40,10 +44,13 @@ class SimpleString extends AbstractChromosome{
 			}
 		}
 		
+		$this->fitness = $fitness;
 		return $fitness;
 	}
 	
-	public function breeding($partner, $options = array()){
+	public function crossover($partner, $options = array()){
+		$tmp_options = array_merge(self::$options_default, $options);
+		
 		$goal = str_split($options['goal']);
 		$a = str_split($partner->get_data());
 		$b = str_split($this->data);
@@ -51,15 +58,18 @@ class SimpleString extends AbstractChromosome{
 		$c_data = '';
 		foreach($goal as $i => $chr){
 			
-			$tmp_a = isset($a[$i]) ? $a[$i] : rand(0, strlen($tmp_options['seed']) - 1);
-			$tmp_b = isset($b[$i]) ? $b[$i] : rand(0, strlen($tmp_options['seed']) - 1);
-			
-			if($tmp_a == $chr)
-				$c_data .= $tmp_a;
-			else if($tmp_b == $chr)
-				$c_data .= $tmp_b;
-			else
-				$c_data .= rand(0, 1) == 1 ? $tmp_a : $tmp_b;
+			if(isset($a[$i]) && isset($b[$i])){
+				$c_data .= rand(0, 1) == 1 ? $a[$i] : $b[$i];
+			}
+			else if(isset($a[$i])){
+				$c_data .= $a[$i];
+			}
+			else if(isset($b[$i])){
+				$c_data .= $b[$i];
+			}
+			else{
+				$c_data .= rand(0, strlen($tmp_options['seed']) - 1);
+			}
 		}
 		$class_name = get_called_class();
 		return new $class_name($c_data);

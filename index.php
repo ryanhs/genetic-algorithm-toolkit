@@ -1,26 +1,37 @@
 <?php
 
 require 'vendor/autoload.php';
+use \Ryanhs\Hook\Hook;
+use \Ryanhs\GAToolkit\Toolkit;
+use \Ryanhs\GAToolkit\Chromosome\SimpleString;
 
-$d = new \Ryanhs\GAToolkit\Dependency();
-$d->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
+$ga = new Toolkit();
 
-$options = array(
-	'length' => 4,
-	'goal' => 'test',
+
+$ga->goal = 'hello world';
+$ga->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleString';
+
+$ga->selection = 0.9;
+$ga->mutation = 0.1;
+
+//$ga->max_generation = 20;
+$ga->max_population = 20;
+
+Hook::on(Toolkit::HOOK_REGENERATION, function($params){
+	$ga = $params['object'];
+	echo 'Generation #' . $ga->generation . ' -> ' . $ga->solution . PHP_EOL;
 	
-	'max_generation' => 5
-);
-
-$ga = new \Ryanhs\GAToolkit\GeneticAlgorithm($d);
-
-
-\Ryanhs\Hook\Hook::on(\Ryanhs\GAToolkit\GeneticAlgorithm::HOOK_REGENERATION, function() use ($ga){
-	echo 'Regeneration ' . $ga->population_i . ' => ' . $ga->get_best()->get_data() . PHP_EOL;
+	time_nanosleep(0, 50000000);
 });
 
-$res = $ga->run($options);
+Hook::on(Toolkit::HOOK_FINISH_GOAL, function($params){
+	$ga = $params['object'];
+	echo 'Solution get on generation #' . $ga->generation . ' -> ' . $ga->solution . PHP_EOL;
+});
 
-var_dump(
-	$res
-);
+Hook::on(Toolkit::HOOK_FINISH_NOGOAL, function($params){
+	$ga = $params['object'];
+	echo 'No Solution! reach max generation #' . $ga->generation . PHP_EOL;
+});
+
+$ga->run();

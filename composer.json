@@ -13,7 +13,8 @@
     ],
     "minimum-stability": "RC",
     "require": {
-    	"ryanhs/hook" : "~1.0"
+    	"ryanhs/hook" : "~1.0",
+    	"ryanhs/dependency" : "~1.0"
     },
     "autoload": {
 		"psr-4": {
