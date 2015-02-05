@@ -53,11 +53,15 @@ class Toolkit extends Dependency{
 			//$this->dependency['generation_history'][] = $this->generation->get_population();
 			
 			$this->generation->selection($this->selection);
-			$this->generation->crossover($this->max_population, $this->goal);
+			$this->generation->crossover($this->max_population, $this->goal); // regeneration
 			$this->generation->mutation($this->mutation, $this->goal);
 			
 			$this->generation->fitness_function($this->goal);
 			$this->solution = $this->generation->best_chromosome->get_data();
+			
+			Hook::call(self::HOOK_REGENERATION, array(
+				'object' => $this
+			));
 			
 			if($this->solution == $this->goal){
 				Hook::call(self::HOOK_FINISH_GOAL, array(
@@ -65,10 +69,6 @@ class Toolkit extends Dependency{
 				));
 				return true;
 			}
-			
-			Hook::call(self::HOOK_REGENERATION, array(
-				'object' => $this
-			));
 		}
 		
 		Hook::call(self::HOOK_FINISH_NOGOAL, array(

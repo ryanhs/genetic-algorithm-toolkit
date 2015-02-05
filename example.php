@@ -7,9 +7,9 @@ use \Ryanhs\GAToolkit\Chromosome\SimpleString;
 
 $ga = new Toolkit();
 
-
-$ga->goal = 'hello world';
-$ga->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized';
+$ga->goal = isset($argv['1']) ? $argv['1'] : 'test';
+//$ga->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleStringOptimized';
+$ga->chromosome = '\Ryanhs\GAToolkit\Chromosome\SimpleStringStd';
 
 $ga->selection = 0.9;
 $ga->mutation = 0.1;
