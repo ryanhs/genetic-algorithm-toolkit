@@ -37,7 +37,9 @@ class Toolkit extends Dependency{
 	}
 	
 	public function run(){
-		$this->generation = new Generation($this->chromosome);
+		if($this->generation === null)
+			$this->generation = new Generation($this->chromosome);
+			
 		$this->generation->init_population($this->max_population, $this->goal);
 		
 	// first generation	
